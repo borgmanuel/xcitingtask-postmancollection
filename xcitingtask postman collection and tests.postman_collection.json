@@ -1,0 +1,1344 @@
+{
+	"info": {
+		"_postman_id": "af116d55-a430-4a49-8f43-1f35538925c4",
+		"name": "xcitingtask postman collection and tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26323544",
+		"_collection_link": "https://xciting.postman.co/workspace/xciting-Workspace~f574cb5a-e67b-4295-81c0-71ad241eda9d/collection/26323544-af116d55-a430-4a49-8f43-1f35538925c4?action=share&source=collection_link&creator=26323544"
+	},
+	"item": [
+		{
+			"name": "gamelauncher",
+			"item": [
+				{
+					"name": "play/gamecode",
+					"item": [
+						{
+							"name": "tests",
+							"item": [
+								{
+									"name": "works with redirect",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Test for status code 302\r",
+													"pm.test(\"Status code is 302 Found\", function () {\r",
+													"    pm.response.to.have.status(302);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Location header format is correct\", function () {\r",
+													"    var locationHeader = pm.response.headers.get('Location');\r",
+													"    var expectedStartUrl = \"https://games.xciting.com/game1?session\";\r",
+													"    pm.expect(locationHeader).to.contain(expectedStartUrl);\r",
+													"\r",
+													"    // Check that the URL contains the language parameter set to 'en'\r",
+													"    pm.expect(locationHeader).to.include(\"&language=en\");\r",
+													"    var sessionId = locationHeader.substring(\r",
+													"        locationHeader.indexOf(\"session=\") + \"session=\".length,\r",
+													"        locationHeader.indexOf(\"&\")\r",
+													"    );\r",
+													"    var uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;\r",
+													"    pm.expect(sessionId).to.match(uuidRegex, \"Session ID should be a valid UUID\");\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"followRedirects": false
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "X-API-KEY",
+												"value": "your-secure-api-key",
+												"type": "text",
+												"disabled": true
+											},
+											{
+												"key": "X-API-SECRET",
+												"value": "your-secure-api-secret",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{gamelauncherUrl}}/play/game1?language=en",
+											"host": [
+												"{{gamelauncherUrl}}"
+											],
+											"path": [
+												"play",
+												"game1"
+											],
+											"query": [
+												{
+													"key": "language",
+													"value": "en"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "works with saved language tr",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Test for status code 302\r",
+													"pm.test(\"Status code is 302 Found\", function () {\r",
+													"    pm.response.to.have.status(302);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Location header format is correct\", function () {\r",
+													"    var locationHeader = pm.response.headers.get('Location');\r",
+													"    var expectedStartUrl = \"https://games.xciting.com/game1?session=\";\r",
+													"    pm.expect(locationHeader).to.contain(expectedStartUrl);\r",
+													"\r",
+													"    // Check that the URL contains the language parameter set to 'tr'\r",
+													"    pm.expect(locationHeader).to.include(\"&language=tr\");\r",
+													"    var sessionId = locationHeader.substring(\r",
+													"        locationHeader.indexOf(\"session=\") + \"session=\".length,\r",
+													"        locationHeader.indexOf(\"&\")\r",
+													"    );\r",
+													"    var uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;\r",
+													"    pm.expect(sessionId).to.match(uuidRegex, \"Session ID should be a valid UUID\");\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"followRedirects": false
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "X-API-KEY",
+												"value": "your-secure-api-key",
+												"type": "text",
+												"disabled": true
+											},
+											{
+												"key": "X-API-SECRET",
+												"value": "your-secure-api-secret",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{gamelauncherUrl}}/play/game1?language=tr",
+											"host": [
+												"{{gamelauncherUrl}}"
+											],
+											"path": [
+												"play",
+												"game1"
+											],
+											"query": [
+												{
+													"key": "language",
+													"value": "tr"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "language not found will redirect to English",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Test for status code 302\r",
+													"pm.test(\"Status code is 302 Found\", function () {\r",
+													"    pm.response.to.have.status(302);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"language not found will default to English\", function () {\r",
+													"    var locationHeader = pm.response.headers.get('Location');\r",
+													"     var expectedStartUrl = \"https://games.xciting.com/game1?session=\";\r",
+													"    pm.expect(locationHeader).to.contain(expectedStartUrl);\r",
+													"\r",
+													"    // Check that the URL contains the language parameter set to 'en'\r",
+													"    pm.expect(locationHeader).to.include(\"&language=en\");\r",
+													"    var sessionId = locationHeader.substring(\r",
+													"        locationHeader.indexOf(\"session=\") + \"session=\".length,\r",
+													"        locationHeader.indexOf(\"&\")\r",
+													"    );\r",
+													"    var uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;\r",
+													"    pm.expect(sessionId).to.match(uuidRegex, \"Session ID should be a valid UUID\");\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"followRedirects": false
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "X-API-KEY",
+												"value": "your-secure-api-key",
+												"type": "text",
+												"disabled": true
+											},
+											{
+												"key": "X-API-SECRET",
+												"value": "your-secure-api-secret",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{gamelauncherUrl}}/play/game1?language=invalidLanguage",
+											"host": [
+												"{{gamelauncherUrl}}"
+											],
+											"path": [
+												"play",
+												"game1"
+											],
+											"query": [
+												{
+													"key": "language",
+													"value": "invalidLanguage"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "will redirect to English if language is not passed",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Test for status code 302\r",
+													"pm.test(\"Status code is 302 Found\", function () {\r",
+													"    pm.response.to.have.status(302);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"language not found will default to English\", function () {\r",
+													"    var locationHeader = pm.response.headers.get('Location');\r",
+													"     var expectedStartUrl = \"https://games.xciting.com/game1?session=\";\r",
+													"    pm.expect(locationHeader).to.contain(expectedStartUrl);\r",
+													"\r",
+													"    // Check that the URL contains the language parameter set to 'en'\r",
+													"    pm.expect(locationHeader).to.include(\"&language=en\");\r",
+													"    var sessionId = locationHeader.substring(\r",
+													"        locationHeader.indexOf(\"session=\") + \"session=\".length,\r",
+													"        locationHeader.indexOf(\"&\")\r",
+													"    );\r",
+													"    var uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;\r",
+													"    pm.expect(sessionId).to.match(uuidRegex, \"Session ID should be a valid UUID\");\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"followRedirects": false
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "X-API-KEY",
+												"value": "your-secure-api-key",
+												"type": "text",
+												"disabled": true
+											},
+											{
+												"key": "X-API-SECRET",
+												"value": "your-secure-api-secret",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{gamelauncherUrl}}/play/game1",
+											"host": [
+												"{{gamelauncherUrl}}"
+											],
+											"path": [
+												"play",
+												"game1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "game not found",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 404 Not Found\", function () {\r",
+													"    pm.response.to.have.status(404);\r",
+													"});\r",
+													"pm.test(\"Check 404 response body\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    pm.expect(jsonData.statusCode).to.eql(404);\r",
+													"    pm.expect(jsonData.customMessage).to.eql(\"Game not found: gamenotFound\");\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"followRedirects": false
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "X-API-KEY",
+												"value": "your-secure-api-key",
+												"type": "text",
+												"disabled": true
+											},
+											{
+												"key": "X-API-SECRET",
+												"value": "your-secure-api-secret",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{gamelauncherUrl}}/play/gamenotFound?language=en",
+											"host": [
+												"{{gamelauncherUrl}}"
+											],
+											"path": [
+												"play",
+												"gamenotFound"
+											],
+											"query": [
+												{
+													"key": "language",
+													"value": "en"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "401 with invalid admin",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"followRedirects": false
+									},
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "username",
+													"value": "invalidName",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "password123",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "X-API-KEY",
+												"value": "your-secure-api-key",
+												"type": "text",
+												"disabled": true
+											},
+											{
+												"key": "X-API-SECRET",
+												"value": "your-secure-api-secret",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{gamelauncherUrl}}/play/gamenotFound?language=en",
+											"host": [
+												"{{gamelauncherUrl}}"
+											],
+											"path": [
+												"play",
+												"gamenotFound"
+											],
+											"query": [
+												{
+													"key": "language",
+													"value": "en"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "401 with invalid password",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"followRedirects": false
+									},
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "invalidPassword",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "admin",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "X-API-KEY",
+												"value": "your-secure-api-key",
+												"type": "text",
+												"disabled": true
+											},
+											{
+												"key": "X-API-SECRET",
+												"value": "your-secure-api-secret",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{gamelauncherUrl}}/play/gamenotFound?language=en",
+											"host": [
+												"{{gamelauncherUrl}}"
+											],
+											"path": [
+												"play",
+												"gamenotFound"
+											],
+											"query": [
+												{
+													"key": "language",
+													"value": "en"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "401 without auth",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"followRedirects": false
+									},
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "X-API-KEY",
+												"value": "your-secure-api-key",
+												"type": "text",
+												"disabled": true
+											},
+											{
+												"key": "X-API-SECRET",
+												"value": "your-secure-api-secret",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{gamelauncherUrl}}/play/gamenotFound?language=en",
+											"host": [
+												"{{gamelauncherUrl}}"
+											],
+											"path": [
+												"play",
+												"gamenotFound"
+											],
+											"query": [
+												{
+													"key": "language",
+													"value": "en"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "401 when not GET",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"followRedirects": false
+									},
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-API-KEY",
+												"value": "your-secure-api-key",
+												"type": "text",
+												"disabled": true
+											},
+											{
+												"key": "X-API-SECRET",
+												"value": "your-secure-api-secret",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{gamelauncherUrl}}/play/gamenotFound?language=en",
+											"host": [
+												"{{gamelauncherUrl}}"
+											],
+											"path": [
+												"play",
+												"gamenotFound"
+											],
+											"query": [
+												{
+													"key": "language",
+													"value": "en"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "play/gamecode",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "password123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-API-KEY",
+										"value": "your-secure-api-key",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "X-API-SECRET",
+										"value": "your-secure-api-secret",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{gamelauncherUrl}}/play/game1?language=en",
+									"host": [
+										"{{gamelauncherUrl}}"
+									],
+									"path": [
+										"play",
+										"game1"
+									],
+									"query": [
+										{
+											"key": "language",
+											"value": "en"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "backoffice",
+			"item": [
+				{
+					"name": "/api/sessions/launched-today",
+					"item": [
+						{
+							"name": "tests",
+							"item": [
+								{
+									"name": "works",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Call successful\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response is not null\", function () {\r",
+													"    pm.response.to.not.be.null;\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{backOfficeUrl}}/api/sessions/launched-today",
+											"host": [
+												"{{backOfficeUrl}}"
+											],
+											"path": [
+												"api",
+												"sessions",
+												"launched-today"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "401 with invalid admin",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"followRedirects": false
+									},
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "username",
+													"value": "invalidName",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "password123",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "X-API-KEY",
+												"value": "your-secure-api-key",
+												"type": "text",
+												"disabled": true
+											},
+											{
+												"key": "X-API-SECRET",
+												"value": "your-secure-api-secret",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{backOfficeUrl}}/api/sessions/launched-today",
+											"host": [
+												"{{backOfficeUrl}}"
+											],
+											"path": [
+												"api",
+												"sessions",
+												"launched-today"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "401 with invalid admin",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"followRedirects": false
+									},
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "invalidPassword",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "admin",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "X-API-KEY",
+												"value": "your-secure-api-key",
+												"type": "text",
+												"disabled": true
+											},
+											{
+												"key": "X-API-SECRET",
+												"value": "your-secure-api-secret",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{backOfficeUrl}}/api/sessions/launched-today",
+											"host": [
+												"{{backOfficeUrl}}"
+											],
+											"path": [
+												"api",
+												"sessions",
+												"launched-today"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "401 without auth",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"followRedirects": false
+									},
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "X-API-KEY",
+												"value": "your-secure-api-key",
+												"type": "text",
+												"disabled": true
+											},
+											{
+												"key": "X-API-SECRET",
+												"value": "your-secure-api-secret",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{backOfficeUrl}}/api/sessions/launched-today",
+											"host": [
+												"{{backOfficeUrl}}"
+											],
+											"path": [
+												"api",
+												"sessions",
+												"launched-today"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "401 when not GET",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"followRedirects": false
+									},
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-API-KEY",
+												"value": "your-secure-api-key",
+												"type": "text",
+												"disabled": true
+											},
+											{
+												"key": "X-API-SECRET",
+												"value": "your-secure-api-secret",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{backOfficeUrl}}/api/sessions/launched-today",
+											"host": [
+												"{{backOfficeUrl}}"
+											],
+											"path": [
+												"api",
+												"sessions",
+												"launched-today"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "session-launched-today",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Call successful\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is not null\", function () {\r",
+											"    pm.response.to.not.be.null;\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8081/api/sessions/launched-today",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"sessions",
+										"launched-today"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/api/games/launched-today",
+					"item": [
+						{
+							"name": "tests",
+							"item": [
+								{
+									"name": "works and check body is not empty",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Call successful\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response is not null\", function () {\r",
+													"    pm.response.to.not.be.null;\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{backOfficeUrl}}/api/games/launched-today",
+											"host": [
+												"{{backOfficeUrl}}"
+											],
+											"path": [
+												"api",
+												"games",
+												"launched-today"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "401 with invalid admin",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"followRedirects": false
+									},
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "username",
+													"value": "invalidName",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "password123",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "X-API-KEY",
+												"value": "your-secure-api-key",
+												"type": "text",
+												"disabled": true
+											},
+											{
+												"key": "X-API-SECRET",
+												"value": "your-secure-api-secret",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{backOfficeUrl}}/api/games/launched-today",
+											"host": [
+												"{{backOfficeUrl}}"
+											],
+											"path": [
+												"api",
+												"games",
+												"launched-today"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "401 with invalid admin",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"followRedirects": false
+									},
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "invalidPassword",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "admin",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "X-API-KEY",
+												"value": "your-secure-api-key",
+												"type": "text",
+												"disabled": true
+											},
+											{
+												"key": "X-API-SECRET",
+												"value": "your-secure-api-secret",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{backOfficeUrl}}/api/games/launched-today",
+											"host": [
+												"{{backOfficeUrl}}"
+											],
+											"path": [
+												"api",
+												"games",
+												"launched-today"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "401 without auth",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"followRedirects": false
+									},
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "X-API-KEY",
+												"value": "your-secure-api-key",
+												"type": "text",
+												"disabled": true
+											},
+											{
+												"key": "X-API-SECRET",
+												"value": "your-secure-api-secret",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{backOfficeUrl}}/api/games/launched-today",
+											"host": [
+												"{{backOfficeUrl}}"
+											],
+											"path": [
+												"api",
+												"games",
+												"launched-today"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "401 when not GET",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"followRedirects": false
+									},
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "X-API-KEY",
+												"value": "your-secure-api-key",
+												"type": "text",
+												"disabled": true
+											},
+											{
+												"key": "X-API-SECRET",
+												"value": "your-secure-api-secret",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{backOfficeUrl}}/api/games/launched-today",
+											"host": [
+												"{{backOfficeUrl}}"
+											],
+											"path": [
+												"api",
+												"games",
+												"launched-today"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "games-launched-today",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{backOfficeUrl}}/api/games/launched-today",
+									"host": [
+										"{{backOfficeUrl}}"
+									],
+									"path": [
+										"api",
+										"games",
+										"launched-today"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "password123",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "admin",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "gamelauncherUrl",
+			"value": "http://localhost:8082",
+			"type": "string"
+		},
+		{
+			"key": "backOfficeUrl",
+			"value": "http://localhost:8081",
+			"type": "string"
+		}
+	]
+}
